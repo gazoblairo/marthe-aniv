@@ -18,10 +18,12 @@
   <!-- Écran d'ouverture principal -->
   <div id="overlay" class="overlay active">
     <div class="overlay-card glass">
+      <div class="heart-mark" aria-hidden="true"></div>
+      <p class="overlay-badge">Pour toi, Marthe</p>
       <h1>Bienvenue ❤️</h1>
-      <p>Avant d'ouvrir cette surprise, écris ton prénom.</p>
+      <p class="overlay-instruction">Avant d'ouvrir cette surprise, écris ton prénom.</p>
       <input id="nameInput" type="text" placeholder="Entre ton prénom" autocomplete="off">
-      <button id="openButton" class="button">Ouvrir la surprise</button>
+      <button id="openButton" class="button">✨ Ouvrir ma surprise</button>
       <p id="overlayMessage" class="overlay-message"></p>
     </div>
   </div>
@@ -33,11 +35,40 @@
         <p class="hero-label">Pour toi, Marthe</p>
         <h1>❤️ Joyeux 18ème Anniversaire Marthe ❤️</h1>
         <p class="hero-subtitle">À la plus merveilleuse personne de mon univers.</p>
+        <div class="reason-quick-nav" aria-label="Navigation rapide">
+          <a href="#videoSection" class="quick-nav-btn">🎬 Voir la vidéo</a>
+          <a href="#musicSection" class="quick-nav-btn">🎵 Écouter la playlist</a>
+        </div>
         <button class="button button-large" id="startStory">Commencer notre histoire</button>
       </div>
     </section>
 
     <section class="section countdown-section glass" id="countdown">
+      <div class="countdown-header">
+        <h2>✨ Le compte à rebours de son grand jour ✨</h2>
+        <p>Plus que quelques instants avant les 18 ans de Marthe ❤️</p>
+      </div>
+
+      <div class="countdown-grid" aria-live="polite">
+        <div class="countdown-card">
+          <span id="days">00</span>
+          <small>Jours</small>
+        </div>
+        <div class="countdown-card">
+          <span id="hours">00</span>
+          <small>Heures</small>
+        </div>
+        <div class="countdown-card">
+          <span id="minutes">00</span>
+          <small>Minutes</small>
+        </div>
+        <div class="countdown-card">
+          <span id="seconds">00</span>
+          <small>Secondes</small>
+        </div>
+      </div>
+
+      <p id="countdownMessage" class="countdown-message">Plus que quelques instants avant les 18 ans de Marthe ❤️</p>
     </section>
 
     <!-- Nouvelle section galerie moderne et romantique -->
@@ -139,15 +170,16 @@
 
     <section class="section reasons-section glass" id="reasons">
       <div class="section-header">
-        <h2>30 raisons pour lesquelles je t'aime</h2>
+        <h2>10 raisons pour lesquelles je t'aime</h2>
         <p>Chaque raison est une étincelle de mon amour pour toi.</p>
       </div>
+
       <div class="reasons-grid" id="reasonsGrid"></div>
     </section>
 
     <section class="section reasons-100-section glass" id="reasons100">
       <div class="section-header">
-        <h2>100 raisons pour lesquelles je t'aime</h2>
+        <h2>100 autres raisons pour lesquelles je t'aime</h2>
         <p>Chaque clic dévoile une nouvelle raison de t'aimer.</p>
       </div>
       <div class="discover-reason-card glass">
@@ -181,11 +213,52 @@
         <p>Un coffret magique qui s'ouvre pour révéler une douce surprise.</p>
       </div>
       <div class="giftbox-container">
-        <div class="giftbox" id="giftBox">
+        <div class="giftbox" id="giftBox" aria-label="Ouvrir le coffre cadeau" tabindex="0" role="button">
           <div class="box-lid"></div>
           <div class="box-body"></div>
           <div class="gift-ribbon"></div>
+          <div class="giftbox-glow" aria-hidden="true"></div>
+          <div class="giftbox-particles" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
         </div>
+
+        <div class="giftbox-surprise" id="giftBoxSurprise" aria-live="polite">
+          <div class="giftbox-light" aria-hidden="true"></div>
+          <div class="giftbox-particles-layer" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          <h3 class="giftbox-title">🎁 Une surprise rien que pour toi, Marthe ❤️</h3>
+
+          <div class="giftbox-content" id="giftBoxContent">
+            <div class="giftbox-media-frame">
+              <img id="giftBoxImage" class="giftbox-image" alt="Surprise pour Marthe" />
+              <div id="giftBoxPlaceholder" class="giftbox-placeholder">✨ Ta surprise arrive bientôt...</div>
+            </div>
+            <p class="giftbox-caption">Certains souvenirs méritent une place spéciale. ❤️</p>
+            <button type="button" id="giftContinueButton" class="giftbox-action-btn">Continuer ✨</button>
+          </div>
+
+          <div class="giftbox-video-stage hidden" id="giftVideoStage">
+            <p class="giftbox-video-text">Et ce n'est pas tout... ❤️</p>
+            <p class="giftbox-video-message">Joyeux 18 ans Marthe ❤️<br>Que ce souvenir reste toujours à nous.</p>
+            <video id="giftBoxVideo" class="giftbox-video" playsinline preload="metadata" controls muted>
+              <source src="" type="video/mp4">
+              Votre navigateur ne supporte pas la vidéo.
+            </video>
+          </div>
+
+          <button type="button" id="giftCloseButton" class="giftbox-close-btn">Fermer ❤️</button>
+        </div>
+
         <p id="giftMessageBox" class="gift-message-box">Clique sur la boîte pour ouvrir mon cœur.</p>
       </div>
     </section>

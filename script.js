@@ -1,5 +1,8 @@
 // Gestion de l'ouverture de la surprise et de toutes les interactions du site
 const overlay = document.getElementById('overlay');
+const overlayCard = document.querySelector('.overlay-card');
+const overlayTitle = document.querySelector('.overlay-card h1');
+const overlayIntro = document.querySelector('.overlay-instruction');
 const openButton = document.getElementById('openButton');
 const nameInput = document.getElementById('nameInput');
 const overlayMessage = document.getElementById('overlayMessage');
@@ -45,12 +48,26 @@ const closeLightbox = document.getElementById('closeLightbox');
 const discoverReason = document.getElementById('discoverReason');
 const reasonReveal = document.getElementById('reasonReveal');
 const giftBox = document.getElementById('giftBox');
+const giftBoxContainer = giftBox.closest('.giftbox-container');
 const giftMessageBox = document.getElementById('giftMessageBox');
+const giftBoxSurprise = document.getElementById('giftBoxSurprise');
+const giftBoxImage = document.getElementById('giftBoxImage');
+const giftBoxPlaceholder = document.getElementById('giftBoxPlaceholder');
+const giftBoxContent = document.getElementById('giftBoxContent');
+const giftContinueButton = document.getElementById('giftContinueButton');
+const giftVideoStage = document.getElementById('giftVideoStage');
+const giftBoxVideo = document.getElementById('giftBoxVideo');
+const giftCloseButton = document.getElementById('giftCloseButton');
 const starMarthe = document.getElementById('starMarthe');
 const constellationMessage = document.getElementById('constellationMessage');
 const finalButton = document.getElementById('finalSurprise');
 const finalMedia = document.getElementById('finalMedia');
 const body = document.body;
+
+const surpriseImageUrl = encodeURI('images/📸 Éclats.img.jpeg');
+const surpriseVideoUrl = encodeURI('videos/🎬 Nos Moments.déo.mp4');
+let giftIsOpen = false;
+let videoStageShown = false;
 
 // Éléments de la galerie photo moderne
 const photoLightbox = document.getElementById('photoLightbox');
@@ -108,101 +125,14 @@ let quoteIndex = 0;
 // Raisons pour lesquelles je t'aime, 30 belles déclarations
 const reasons = [
   'Ta douceur m’apaise.',
-  'Ton rire illumine mes jours.',
-  'Ta confiance me rend plus fort.',
+  'Ton sourire illumine mes jours.',
   'Ta présence est un cadeau constant.',
   'Tu es la poésie de ma vie.',
-  'Tes yeux racontent notre futur.',
   'Ton cœur est mon refuge.',
   'Tu inspires mes plus beaux rêves.',
-  'Ta tendresse apaise mes peurs.',
-  'Tu m’encourages sans limite.',
-  'Chaque pensée de toi est un sourire.',
-  'Tu embellis bien plus qu’un instant.',
-  'Tu rends l’ordinaire extraordinaire.',
   'Ton amour est ma meilleure étoile.',
-  'Tu es la mélodie de mes matins.',
   'Tes mots me bercent et me portent.',
-  'Tu me fais croire en des miracles.',
-  'Ta force me guide avec douceur.',
-  'Tu es la chaleur de mon hiver.',
-  'Ta beauté est douce comme la lune.',
-  'Tu partages mes joies comme mes peines.',
-  'Ta franchise m’inspire chaque jour.',
-  'Tu es le trésor de mon cœur.',
-  'Ta confiance m’offre des ailes.',
-  'Tu me donnes envie d’être meilleur.',
-  'Ton regard est ma plus belle promesse.',
-  'Ton courage m’émerveille.',
-  'Tu es ma plus belle aventure.',
-  'Ton amour illumine toutes mes nuits.',
-  'Tu fais vibrer chaque fibre de mon être.',
-  'Ton sourire est ma douce victoire.',
-  'Ta présence transforme tout en merveilleux.',
-  'Tu es mon éternelle inspiration.',
-  'Ton regard est un tendre abri.',
-  'Tu es mon plus beau projet.',
-  'Tu partages mes rêves les plus fous.',
-  'Tu ajoutes de la magie à chaque instant.',
-  'Tu es ma plus belle surprise.',
-  'Ton rire est ma meilleure chanson.',
-  'Ta voix est la plus douce des mélodies.',
-  'Tu es une lumière dans mes jours.',
-  'Tu es la raison de tant de sourires.',
-  'Ta joie est contagieuse et belle.',
-  'Tu m’offres un amour sans condition.',
-  'Tu es mon équilibre dans l’infini.',
-  'Ta tendresse est mon trésor secret.',
-  'Tu es un poème vivant à mes yeux.',
-  'Ta présence rend tout plus léger.',
-  'Tu es mon rêve éveillé le plus tendre.',
-  'Ton cœur fait battre le mien plus fort.',
-  'Tu es ma plus belle vérité.',
-  'Ta force est douce et rassurante.',
-  'Tu es le plus précieux des cadeaux.',
-  'Tu es ma raison de croire encore.',
-  'Ton regard est mon plus bel horizon.',
-  'Tu es ma confiance, ma passion.',
-  'Ta douceur illumine mes nuits.',
-  'Ton sourire est ma plus belle étoile.',
-  'Tu es la meilleure partie de moi.',
-  'Tu embellis chacun de mes matins.',
-  'Tu es mon enchantement quotidien.',
-  'Ta présence fait danser mon cœur.',
-  'Tu es la chaleur de mes rêves.',
-  'Ton amour est un luxe infini.',
-  'Tu es ma plus belle promesse tenue.',
-  'Ta voix fait fleurir mon âme.',
-  'Tu es mon plus doux refuge.',
-  'Tu es la lumière de mon destin.',
-  'Ton sourire efface toutes mes ombres.',
-  'Tu es l’éclat de mon présent.',
-  'Ta douceur est un rayon de soleil.',
-  'Tu es mon histoire préférée.',
-  'Tu es mon avenir le plus lumineux.',
-  'Ta tendresse m’offre des ailes.',
-  'Tu es ma force quand j’en ai besoin.',
-  'Ton amour rend chaque seconde unique.',
-  'Tu es mon plus beau rêve accompli.',
-  'Tu es la magie de ma vie quotidienne.',
-  'Ton sourire est mon plus beau paysage.',
-  'Tu es l’étoile qui me guide.',
-  'Ta présence est un cadeau éternel.',
-  'Tu es le souffle léger de mon bonheur.',
-  'Ton regard est ma plus douce promesse.',
-  'Tu es mon aventure préférée.',
-  'Ta voix me berce comme un rêve.',
-  'Tu es le trésor caché de mon cœur.',
-  'Ton amour illumine mes jours sombres.',
-  'Tu es un feu doux dans ma nuit.',
-  'Tu es la mélodie qui me fait vibrer.',
-  'Ton sourire est mon plus beau matin.',
-  'Tu es la vraie magie de mon monde.',
-  'Tu es ma plus belle découverte.',
-  'Ton cœur est mon lieu de paix.',
-  'Tu es ma plus douce évidence.',
-  'Tu es le souffle de mon espoir.',
-  'Ton amour est ma plus grande richesse.',
+  'Tu rends l’ordinaire extraordinaire.',
   'Tu es mon plus beau « toujours ». '
 ];
 let discoveredReasons = [];
@@ -232,6 +162,7 @@ function renderReasons() {
 
 // Affiche la citation suivante avec animation délicate
 function rotateQuotes() {
+  if (!quoteText) return;
   quoteText.classList.remove('fade');
   void quoteText.offsetWidth;
   quoteText.textContent = quotes[quoteIndex];
@@ -241,28 +172,47 @@ function rotateQuotes() {
 
 // Met à jour le compte à rebours vers le 3 octobre 2026 à minuit
 function startCountdown() {
+  if (!daysEl || !hoursEl || !minutesEl || !secondsEl || !countdownMessage) {
+    return;
+  }
+
+  const countdownSection = document.getElementById('countdown');
+  const countdownGrid = document.querySelector('.countdown-grid');
   const targetDate = new Date('2026-10-03T00:00:00');
+
+  const animateValue = (element, value) => {
+    if (!element) return;
+    if (element.textContent !== value) {
+      element.classList.remove('countdown-update');
+      void element.offsetWidth;
+      element.classList.add('countdown-update');
+      element.textContent = value;
+      setTimeout(() => element.classList.remove('countdown-update'), 220);
+    }
+  };
+
   const timer = setInterval(() => {
     const now = new Date();
     const diff = targetDate - now;
+
     if (diff <= 0) {
       clearInterval(timer);
-      daysEl.textContent = '00';
-      hoursEl.textContent = '00';
-      minutesEl.textContent = '00';
-      secondsEl.textContent = '00';
-      countdownMessage.textContent = '🎉 Joyeux Anniversaire Marthe 🎉';
+      if (countdownGrid) countdownGrid.style.display = 'none';
+      if (countdownSection) countdownSection.classList.add('countdown-celebrating');
+      countdownMessage.textContent = '🎉 JOYEUX 18ᵉ ANNIVERSAIRE MARTHE ! ❤️';
       body.classList.add('fireworks');
       return;
     }
+
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
     const minutes = Math.floor((diff / (1000 * 60)) % 60);
     const seconds = Math.floor((diff / 1000) % 60);
-    daysEl.textContent = String(days).padStart(2, '0');
-    hoursEl.textContent = String(hours).padStart(2, '0');
-    minutesEl.textContent = String(minutes).padStart(2, '0');
-    secondsEl.textContent = String(seconds).padStart(2, '0');
+
+    animateValue(daysEl, String(days).padStart(2, '0'));
+    animateValue(hoursEl, String(hours).padStart(2, '0'));
+    animateValue(minutesEl, String(minutes).padStart(2, '0'));
+    animateValue(secondsEl, String(seconds).padStart(2, '0'));
   }, 1000);
 }
 
@@ -500,10 +450,101 @@ function discoverReasonClick() {
   reasonReveal.textContent = available[randomIndex];
 }
 
+function setupGiftMedia() {
+  const imageLoadHandler = () => {
+    giftBoxImage.style.display = 'block';
+    giftBoxPlaceholder.style.display = 'none';
+  };
+
+  const imageErrorHandler = () => {
+    giftBoxImage.style.display = 'none';
+    giftBoxPlaceholder.style.display = 'flex';
+  };
+
+  const videoLoadHandler = () => {
+    giftBoxVideo.style.display = 'block';
+  };
+
+  const videoErrorHandler = () => {
+    giftBoxVideo.style.display = 'none';
+  };
+
+  giftBoxImage.onload = imageLoadHandler;
+  giftBoxImage.onerror = imageErrorHandler;
+  giftBoxImage.src = surpriseImageUrl;
+
+  const videoSource = giftBoxVideo.querySelector('source');
+  videoSource.src = surpriseVideoUrl;
+  giftBoxVideo.load();
+  giftBoxVideo.onloadeddata = videoLoadHandler;
+  giftBoxVideo.onerror = videoErrorHandler;
+
+  giftContinueButton.addEventListener('click', () => {
+    if (videoStageShown) return;
+
+    const videoText = document.querySelector('.giftbox-video-text');
+    const videoMessage = document.querySelector('.giftbox-video-message');
+
+    if (videoText) {
+      videoText.textContent = "Et ce n'est pas tout... ❤️";
+    }
+
+    if (videoMessage) {
+      videoMessage.innerHTML = 'Joyeux 18 ans Marthe ❤️<br>Que ce souvenir reste toujours à nous.';
+    }
+
+    giftBoxContent.classList.add('fade-out');
+    setTimeout(() => {
+      giftBoxContent.style.display = 'none';
+      giftVideoStage.classList.remove('hidden');
+      videoStageShown = true;
+      if (giftBoxVideo.style.display !== 'none') {
+        giftBoxVideo.play().catch(() => {});
+      }
+    }, 300);
+  });
+
+  giftCloseButton.addEventListener('click', () => {
+    giftBox.classList.remove('open');
+    giftBoxContainer.classList.remove('open');
+    giftBoxSurprise.classList.remove('open');
+    giftBoxContent.classList.remove('fade-out');
+    giftBoxContent.style.display = 'grid';
+    giftVideoStage.classList.add('hidden');
+    giftBoxVideo.pause();
+    giftBoxVideo.currentTime = 0;
+    giftIsOpen = false;
+    videoStageShown = false;
+    giftMessageBox.textContent = 'Clique sur la boîte pour ouvrir mon cœur.';
+  });
+}
+
+function openGiftSurprise() {
+  if (giftIsOpen) return;
+
+  giftIsOpen = true;
+  giftBox.classList.add('open');
+  giftBoxContainer.classList.add('open');
+  giftBoxSurprise.classList.add('open');
+  giftMessageBox.textContent = 'Tu viens d’ouvrir mon cœur. ❤️';
+
+  setTimeout(() => {
+    giftBoxImage.style.opacity = '1';
+  }, 200);
+}
+
 function initGiftBox() {
+  setupGiftMedia();
+
   giftBox.addEventListener('click', () => {
-    giftBox.classList.toggle('open');
-    giftMessageBox.textContent = giftBox.classList.contains('open') ? 'Tu viens d’ouvrir mon cœur. ❤️' : 'Clique sur la boîte pour ouvrir mon cœur.';
+    openGiftSurprise();
+  });
+
+  giftBox.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      openGiftSurprise();
+    }
   });
 }
 
@@ -741,6 +782,36 @@ function createNewPetal() {
   });
 }
 
+function updateOverlayButtonState() {
+  const valid = nameInput.value.trim().toLowerCase() === 'marthe';
+  openButton.classList.toggle('is-valid', valid);
+  nameInput.classList.toggle('is-valid', valid);
+  nameInput.classList.remove('is-invalid');
+}
+
+function triggerOverlaySuccess() {
+  if (!overlayCard || !overlayTitle || !overlayIntro) {
+    openSurprise();
+    return;
+  }
+
+  overlay.classList.add('is-success');
+  overlayTitle.textContent = 'Marthe ❤️';
+  overlayIntro.textContent = 'Bienvenue dans ton petit univers...';
+
+  overlayTitle.classList.remove('title-reveal');
+  void overlayTitle.offsetWidth;
+  overlayTitle.classList.add('title-reveal');
+
+  overlayIntro.classList.remove('subtitle-reveal');
+  void overlayIntro.offsetWidth;
+  overlayIntro.classList.add('subtitle-reveal');
+
+  setTimeout(() => {
+    openSurprise();
+  }, 1100);
+}
+
 function validateNameAndOpen(event) {
   if (event) {
     event.preventDefault();
@@ -750,21 +821,26 @@ function validateNameAndOpen(event) {
   const normalizedName = rawName.toLowerCase();
 
   if (rawName.length === 0) {
-    overlayMessage.textContent = 'Veuillez entrer votre prénom.';
+    overlayMessage.textContent = 'Veuillez entrer ton prénom.';
+    nameInput.classList.add('is-invalid');
     return;
   }
 
   if (normalizedName === 'marthe') {
     overlayMessage.textContent = '';
-    openSurprise();
+    nameInput.classList.remove('is-invalid');
+    triggerOverlaySuccess();
     return;
   }
 
-  overlayMessage.textContent = 'Désolé ❤️ cette surprise est uniquement destinée à Marthe.';
+  overlayMessage.textContent = 'Cette surprise est uniquement destinée à Marthe ❤️';
+  nameInput.classList.add('is-invalid');
 }
 
 // Validation du prénom et lancement de l'animation d'ouverture
 openButton.addEventListener('click', validateNameAndOpen);
+nameInput.addEventListener('input', updateOverlayButtonState);
+nameInput.addEventListener('focus', () => nameInput.classList.remove('is-invalid'));
 nameInput.addEventListener('keydown', event => {
   if (event.key === 'Enter') {
     validateNameAndOpen(event);
