@@ -217,10 +217,162 @@ function startCountdown() {
 }
 
 // Montre le message romantique lorsqu'un cadeau est cliqué
+function createGiftModal() {
+  const existingModal = document.querySelector('.gift-modal-root');
+  if (existingModal) {
+    existingModal.remove();
+  }
+
+  const modalRoot = document.createElement('div');
+  modalRoot.className = 'gift-modal-root';
+  modalRoot.setAttribute('aria-hidden', 'true');
+  modalRoot.innerHTML = `
+    <div class="gift-modal-backdrop"></div>
+    <div class="gift-modal-card" role="dialog" aria-modal="true" aria-label="Cadeau surprise"></div>
+  `;
+
+  document.body.appendChild(modalRoot);
+
+  modalRoot.addEventListener('click', (event) => {
+    if (event.target === modalRoot || event.target.classList.contains('gift-modal-backdrop')) {
+      closeGiftModal();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && modalRoot.classList.contains('active')) {
+      closeGiftModal();
+    }
+  });
+
+  return modalRoot;
+}
+
+function closeGiftModal() {
+  const modalRoot = document.querySelector('.gift-modal-root');
+  if (!modalRoot) return;
+
+  const video = modalRoot.querySelector('video');
+  if (video) {
+    video.pause();
+    video.currentTime = 0;
+    video.load();
+    video.muted = true;
+  }
+
+  modalRoot.classList.remove('active');
+  modalRoot.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('gift-modal-open');
+}
+
+function openGiftModal(type) {
+  const modalRoot = createGiftModal();
+  const modalCard = modalRoot.querySelector('.gift-modal-card');
+  if (!modalCard) {
+    return;
+  }
+
+  modalCard.innerHTML = '';
+
+  if (type === '1') {
+    modalCard.className = 'gift-modal-card gift-photo';
+    modalCard.innerHTML = `
+      <div class="gift-modal-glow" aria-hidden="true"></div>
+      <div class="gift-modal-particles" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="gift-modal-photo-frame">
+        <img class="gift-modal-photo" src="images/cadeau1.jpg" alt="Cadeau 1 pour Marthe" />
+      </div>
+      <p class="gift-modal-line">Une petite surprise rien que pour toi, Marthe ❤️</p>
+      <p class="gift-modal-line small">Certains souvenirs méritent une place spéciale.</p>
+    `;
+  }
+
+  if (type === '2') {
+    modalCard.className = 'gift-modal-card gift-letter';
+    const lines = [
+      'Marthe,',
+      'Tu es l’une de ces personnes qui rendent les moments simples inoubliables.',
+      'J’espère que cette petite attention te fera sourire aujourd’hui.',
+      'Garde toujours cette belle lumière que tu as en toi.',
+      'Joyeux anniversaire, mon cœur. ❤️'
+    ];
+    modalCard.innerHTML = `
+      <div class="gift-modal-glow" aria-hidden="true"></div>
+      <div class="gift-letter-particles" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <div class="gift-letter-scene">
+        <div class="gift-letter-envelope">
+          <div class="gift-envelope-lid"></div>
+          <div class="gift-envelope-body"></div>
+        </div>
+        <div class="gift-letter-note">
+          <div class="gift-letter-text">
+            ${lines.map((line, index) => `<span class="gift-letter-line" style="--delay:${index * 0.2}s">${line}</span>`).join('')}
+          </div>
+          <div class="gift-letter-heart">❤️</div>
+        </div>
+      </div>
+    `;
+  }
+
+  if (type === '3') {
+    modalCard.className = 'gift-modal-card gift-video-card';
+    modalCard.innerHTML = `
+      <div class="gift-modal-glow" aria-hidden="true"></div>
+      <p class="gift-video-caption">Et ce n’est pas tout... 🎬❤️</p>
+      <div class="gift-video-frame">
+        <video class="gift-video" controls muted playsinline preload="metadata" aria-label="Vidéo surprise pour Marthe">
+          <source src="videos/cadeau3.mp4" type="video/mp4">
+          Votre navigateur ne supporte pas la lecture vidéo.
+        </video>
+      </div>
+    `;
+  }
+
+  if (type === '4') {
+    modalCard.className = 'gift-modal-card gift-final';
+    modalCard.innerHTML = `
+      <div class="gift-final-stars" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="gift-final-message">
+        <p>Marthe...</p>
+        <p>Si tu es arrivée jusqu’ici, c’est que tu as découvert tous mes petits cadeaux. ❤️</p>
+        <p>Mais le plus précieux n’était dans aucune boîte.</p>
+        <p>C’était le temps, les souvenirs et toute l’affection que j’ai mis dans ce petit univers pour toi.</p>
+        <p>Joyeux 18ᵉ anniversaire, mon cœur. ❤️</p>
+        <span class="gift-final-signature">MARTHE ❤️</span>
+      </div>
+    `;
+  }
+
+  const closeButton = document.createElement('button');
+  closeButton.type = 'button';
+  closeButton.className = 'gift-modal-close';
+  closeButton.textContent = 'Fermer ❤️';
+  closeButton.addEventListener('click', closeGiftModal);
+  modalCard.appendChild(closeButton);
+
+  modalRoot.classList.add('active');
+  modalRoot.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('gift-modal-open');
+
+  const video = modalRoot.querySelector('video');
+  if (video) {
+    video.muted = true;
+    video.pause();
+    video.currentTime = 0;
+  }
+}
+
 function initGifts() {
   giftButtons.forEach(button => {
     button.addEventListener('click', () => {
       giftMessage.textContent = button.dataset.message;
+      openGiftModal(button.dataset.gift);
     });
   });
 }
@@ -451,6 +603,10 @@ function discoverReasonClick() {
 }
 
 function setupGiftMedia() {
+  if (!giftBoxImage || !giftBoxPlaceholder || !giftBoxVideo || !giftContinueButton || !giftCloseButton) {
+    return;
+  }
+
   const imageLoadHandler = () => {
     giftBoxImage.style.display = 'block';
     giftBoxPlaceholder.style.display = 'none';
@@ -474,7 +630,9 @@ function setupGiftMedia() {
   giftBoxImage.src = surpriseImageUrl;
 
   const videoSource = giftBoxVideo.querySelector('source');
-  videoSource.src = surpriseVideoUrl;
+  if (videoSource) {
+    videoSource.src = surpriseVideoUrl;
+  }
   giftBoxVideo.load();
   giftBoxVideo.onloadeddata = videoLoadHandler;
   giftBoxVideo.onerror = videoErrorHandler;
@@ -493,29 +651,49 @@ function setupGiftMedia() {
       videoMessage.innerHTML = 'Joyeux 18 ans Marthe ❤️<br>Que ce souvenir reste toujours à nous.';
     }
 
-    giftBoxContent.classList.add('fade-out');
+    if (giftBoxContent) {
+      giftBoxContent.classList.add('fade-out');
+    }
     setTimeout(() => {
-      giftBoxContent.style.display = 'none';
-      giftVideoStage.classList.remove('hidden');
+      if (giftBoxContent) {
+        giftBoxContent.style.display = 'none';
+      }
+      if (giftVideoStage) {
+        giftVideoStage.classList.remove('hidden');
+      }
       videoStageShown = true;
-      if (giftBoxVideo.style.display !== 'none') {
+      if (giftBoxVideo && giftBoxVideo.style.display !== 'none') {
         giftBoxVideo.play().catch(() => {});
       }
     }, 300);
   });
 
   giftCloseButton.addEventListener('click', () => {
-    giftBox.classList.remove('open');
-    giftBoxContainer.classList.remove('open');
-    giftBoxSurprise.classList.remove('open');
-    giftBoxContent.classList.remove('fade-out');
-    giftBoxContent.style.display = 'grid';
-    giftVideoStage.classList.add('hidden');
-    giftBoxVideo.pause();
-    giftBoxVideo.currentTime = 0;
+    if (giftBox) {
+      giftBox.classList.remove('open');
+    }
+    if (giftBoxContainer) {
+      giftBoxContainer.classList.remove('open');
+    }
+    if (giftBoxSurprise) {
+      giftBoxSurprise.classList.remove('open');
+    }
+    if (giftBoxContent) {
+      giftBoxContent.classList.remove('fade-out');
+      giftBoxContent.style.display = 'grid';
+    }
+    if (giftVideoStage) {
+      giftVideoStage.classList.add('hidden');
+    }
+    if (giftBoxVideo) {
+      giftBoxVideo.pause();
+      giftBoxVideo.currentTime = 0;
+    }
     giftIsOpen = false;
     videoStageShown = false;
-    giftMessageBox.textContent = 'Clique sur la boîte pour ouvrir mon cœur.';
+    if (giftMessageBox) {
+      giftMessageBox.textContent = 'Clique sur la boîte pour ouvrir mon cœur.';
+    }
   });
 }
 

@@ -157,7 +157,6 @@
         <div class="promise-card glass"><p>Continuer à t'aimer chaque jour.</p></div>
       </div>
     </section>
-
     <section class="section letter-section" id="letter">
       <div class="section-header glass">
         <h2>Lettre d'amour</h2>
@@ -199,10 +198,10 @@
         <p>Clique sur chaque cadeau pour découvrir une déclaration.</p>
       </div>
       <div class="gift-grid">
-        <button class="gift-card glass" data-message="Tu es le trésor de ma vie.">Cadeau 1</button>
-        <button class="gift-card glass" data-message="Ton sourire illumine mes journées.">Cadeau 2</button>
-        <button class="gift-card glass" data-message="Chaque moment avec toi est précieux.">Cadeau 3</button>
-        <button class="gift-card glass" data-message="Ton amour est mon plus bel avenir.">Cadeau 4</button>
+        <button class="gift-card glass" type="button" data-gift="1" data-message="Tu es le trésor de ma vie.">Cadeau 1</button>
+        <button class="gift-card glass" type="button" data-gift="2" data-message="Ton sourire illumine mes journées.">Cadeau 2</button>
+        <button class="gift-card glass" type="button" data-gift="3" data-message="Chaque moment avec toi est précieux.">Cadeau 3</button>
+        <button class="gift-card glass" type="button" data-gift="4" data-message="Ton amour est mon plus bel avenir.">Cadeau 4</button>
       </div>
       <p id="giftMessage" class="gift-message"></p>
     </section>
@@ -238,14 +237,7 @@
 
           <h3 class="giftbox-title">🎁 Une surprise rien que pour toi, Marthe ❤️</h3>
 
-          <div class="giftbox-content" id="giftBoxContent">
-            <div class="giftbox-media-frame">
-              <img id="giftBoxImage" class="giftbox-image" alt="Surprise pour Marthe" />
-              <div id="giftBoxPlaceholder" class="giftbox-placeholder">✨ Ta surprise arrive bientôt...</div>
-            </div>
-            <p class="giftbox-caption">Certains souvenirs méritent une place spéciale. ❤️</p>
-            <button type="button" id="giftContinueButton" class="giftbox-action-btn">Continuer ✨</button>
-          </div>
+          <div class="giftbox-content" id="giftBoxContent"></div>
 
           <div class="giftbox-video-stage hidden" id="giftVideoStage">
             <p class="giftbox-video-text">Et ce n'est pas tout... ❤️</p>
