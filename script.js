@@ -727,10 +727,21 @@ function initGiftBox() {
 }
 
 function initConstellation() {
+  const constellationCard = document.querySelector('.constellation-card');
+  let constellationResetTimer;
+
   starMarthe.addEventListener('click', () => {
     constellationMessage.textContent = 'Peu importe le nombre d’étoiles dans le ciel, tu resteras toujours la plus brillante à mes yeux.';
+    clearTimeout(constellationResetTimer);
+    constellationCard.classList.remove('is-united');
+    void constellationCard.offsetWidth;
+    constellationCard.classList.add('is-active');
     starMarthe.classList.add('star-glow');
-    setTimeout(() => starMarthe.classList.remove('star-glow'), 2200);
+    setTimeout(() => constellationCard.classList.add('is-united'), 2800);
+    constellationResetTimer = setTimeout(() => {
+      constellationCard.classList.remove('is-active', 'is-united');
+      starMarthe.classList.remove('star-glow');
+    }, 7000);
   });
 }
 
