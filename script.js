@@ -27,6 +27,7 @@ const progressFill = document.getElementById('progressFill');
 const progressThumb = document.getElementById('progressThumb');
 const trackTitle = document.getElementById('trackTitle');
 const playlistEl = document.getElementById('playlist');
+const playlistSecret = document.getElementById('playlistSecret');
 const currentTimeEl = document.getElementById('currentTime');
 const totalTimeEl = document.getElementById('totalTime');
 const prevBtn = document.getElementById('prevBtn');
@@ -38,6 +39,13 @@ const audioVisualizer = document.getElementById('audioVisualizer');
 const musicPlayerCard = document.getElementById('musicPlayerCard');
 const musicNotification = document.getElementById('musicNotification');
 const notifTrackName = document.getElementById('notifTrackName');
+const playlistSecrets = [
+  'Une mélodie qui me rappelle la douceur de ton sourire. ❤️',
+  'Certaines chansons deviennent des souvenirs dès qu’on les écoute. ✨',
+  'Celle-ci est là pour accompagner un petit moment rien qu’à toi. ❤️',
+  'Et celle-ci garde une petite place spéciale dans cette histoire. 🌹'
+];
+let playlistSecretChange = 0;
 const musicParticles = document.getElementById('musicParticles');
 const surpriseButton = document.getElementById('surpriseButton');
 const surpriseMessage = document.getElementById('surpriseMessage');
@@ -478,6 +486,17 @@ function renderPlaylist() {
   });
 }
 
+function updatePlaylistSecret(index) {
+  if (!playlistSecret || !playlistSecrets[index]) return;
+  const changeId = ++playlistSecretChange;
+  playlistSecret.classList.remove('is-visible');
+  setTimeout(() => {
+    if (changeId !== playlistSecretChange) return;
+    playlistSecret.textContent = playlistSecrets[index];
+    playlistSecret.classList.add('is-visible');
+  }, 180);
+}
+
 function getNextTrackIndex() {
   if (isShuffle) {
     let next;
@@ -509,6 +528,7 @@ function loadTrack(index, shouldPlay = true, showNotif = true) {
   audio.src = tracks[index].src;
   trackTitle.textContent = tracks[index].title;
   renderPlaylist();
+  if (shouldPlay) updatePlaylistSecret(index);
   if (showNotif && shouldPlay) showMusicNotification(tracks[index].title);
   if (shouldPlay) {
     audio.play().catch(() => {});
